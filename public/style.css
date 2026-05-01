@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* LEFT IMAGE */
+.left-img {
+    width: 30%;
+    background: url("image/63729c5c326b5939c8fa4327d601f214a56b9c8b-1200x675.png") no-repeat center;
+    background-size: cover;
+}
+
+/* CENTER CONTENT */
+.center {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f4f4;
+}
+
+/* RIGHT IMAGE */
+.right-img {
+    width: 30%;
+    background: url("image/Blog_Generic_How-to-Apply-and-Get-Duplicate-Voter-ID-Card_-1.jpg") no-repeat center;
+    background-size: cover;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 10px;
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

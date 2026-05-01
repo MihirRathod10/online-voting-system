@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Register Test</h2>
+
+<input id="username" placeholder="Username"><br><br>
+<input id="password" placeholder="Password"><br><br>
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+
+<script>
+function register() {
+    fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        })
+    })
+    .then(res => res.text())
+    .then(data => alert(data));
+}
+
+function login() {
+    fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => alert(JSON.stringify(data)));
+}
+</script>
+
+</body>
+</html>

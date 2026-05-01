@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>Register</h2>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<input id="aadhaar" placeholder="Aadhaar (12 digit)">
+<input id="mobile" placeholder="Mobile">
+
+<button onclick="sendOtp()">Send OTP</button>
+
+<input id="otp" placeholder="Enter OTP">
+
+<button onclick="verifyOtp()">Verify OTP</button>
+
+<br><br>
+
+<!-- FACE CAPTURE -->
+<video id="video" width="250" autoplay></video><br><br>
+<button onclick="capture()">Capture Face</button>
+<p id="status"></p>
+
+<br>
+
+<button onclick="register()">Register</button>
+
+<br><br>
+<a href="login.html">Login</a>
+
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+
+let verified = false;
+let faceCaptured = false;
+
+// CAMERA START
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+document.getElementById("video").srcObject = stream;
+})
+.catch(err => {
+console.log("Camera Error:", err);
+alert(err.name + " : " + err.message);
+});
+
+// SEND OTP
+function sendOtp() {
+fetch("http://localhost:5000/send-otp", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({ mobile: mobile.value })
+})
+.then(res => res.text())
+.then(data => alert(data));
+}
+
+// VERIFY OTP
+function verifyOtp() {
+fetch("http://localhost:5000/verify-otp", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+mobile: mobile.value,
+otp: otp.value
+})
+})
+.then(res => res.text())
+.then(data => {
+if (data === "Verified") {
+verified = true;
+alert("OTP Verified ✅");
+} else {
+alert("Wrong OTP ❌");
+}
+});
+}
+
+// CAPTURE FACE
+function capture() {
+faceCaptured = true;
+document.getElementById("status").innerText = "Face Captured ✅";
+}
+
+// REGISTER
+function register() {
+
+if (!verified) return alert("Verify OTP first ❌");
+
+if (!faceCaptured) return alert("Capture face first ❌");
+
+const aadhaarRegex = /^[0-9]{12}$/;
+if (!aadhaarRegex.test(aadhaar.value)) {
+return alert("Invalid Aadhaar ❌");
+}
+
+fetch("http://localhost:5000/register", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+username: username.value,
+password: password.value,
+aadhaar: aadhaar.value
+})
+})
+.then(res => res.text())
+.then(data => {
+alert(data);
+window.location.href = "login.html";
+});
+
+}
+
+</script>
+
+</body>
+</html>

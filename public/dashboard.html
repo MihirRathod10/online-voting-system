@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>📊 Admin Dashboard</h2>
+
+<h3 id="users"></h3>
+<h3 id="candidates"></h3>
+<h3 id="votes"></h3>
+<h3 id="status"></h3>
+
+<br>
+<a href="admin.html">← Back to Admin</a>
+
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+
+fetch("http://localhost:5000/admin-stats")
+.then(res => res.json())
+.then(data => {
+
+document.getElementById("users").innerText =
+"👥 Total Users: " + data.totalUsers;
+
+document.getElementById("candidates").innerText =
+"🧑‍💼 Total Candidates: " + data.totalCandidates;
+
+document.getElementById("votes").innerText =
+"🗳️ Total Votes: " + data.totalVotes;
+
+document.getElementById("status").innerText =
+"📢 Result Status: " + (data.resultApproved ? "Approved ✅" : "Closed ❌");
+
+});
+
+</script>
+
+</body>
+</html>

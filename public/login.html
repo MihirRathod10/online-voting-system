@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT IMAGE -->
+    <div class="left-img"></div>
+
+    <!-- CENTER CONTENT -->
+    <div class="center">
+        <div class="card">
+            <h2>Login</h2>
+
+            <input id="username" placeholder="Username">
+            <input id="password" type="password" placeholder="Password">
+
+            <button onclick="login()">Login</button>
+
+            <br><br>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="right-img"></div>
+
+</div>
+
+<script>
+function login() {
+    fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.message === "Login successful") {
+            localStorage.setItem("user", document.getElementById("username").value);
+            window.location.href = "face.html";
+        } else {
+            alert(data.message);
+        }
+    });
+}
+</script>
+
+</body>
+</html>

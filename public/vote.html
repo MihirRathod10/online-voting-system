@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Vote</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>Vote</h2>
+<h3 id="welcome"></h3>
+
+<div id="candidates"></div>
+
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+
+const username = localStorage.getItem("user");
+document.getElementById("welcome").innerText = "Welcome " + username;
+
+fetch("http://localhost:5000/candidates")
+.then(res => res.json())
+.then(data => {
+
+const div = document.getElementById("candidates");
+
+data.forEach(c => {
+
+const box = document.createElement("div");
+box.style.border = "1px solid #ccc";
+box.style.margin = "10px";
+box.style.padding = "10px";
+
+box.innerHTML = `
+<img src="http://localhost:5000${c.symbol}" width="50"><br>
+<b>${c.name}</b><br>
+${c.party}<br>
+Votes: ${c.votes}<br>
+<button onclick="vote('${c._id}')">Vote</button>
+`;
+
+div.appendChild(box);
+});
+
+});
+
+function vote(id) {
+fetch("http://localhost:5000/vote", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+username,
+candidateId: id
+})
+})
+.then(res => res.text())
+.then(data => {
+alert(data);
+window.location.href = "result.html";
+});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Results</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>Election Results</h2>
+
+<div id="status"></div>
+
+<canvas id="chart" width="300" height="200"></canvas>
+
+<div id="winner"></div>
+
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+
+// CHECK RESULT STATUS
+fetch("http://localhost:5000/result-status")
+.then(res => res.json())
+.then(status => {
+
+if (!status.approved) {
+document.getElementById("status").innerHTML =
+"<h3>⛔ Results not declared yet</h3>";
+return;
+}
+
+// FETCH CANDIDATES
+fetch("http://localhost:5000/candidates")
+.then(res => res.json())
+.then(data => {
+
+if (data.length === 0) {
+document.getElementById("status").innerText = "No candidates found";
+return;
+}
+
+let names = [];
+let votes = [];
+
+let max = -1;
+let winner = "No Winner";
+
+// PROCESS DATA
+data.forEach(c => {
+names.push(c.name || "Unknown");
+votes.push(c.votes ?? 0);
+
+if ((c.votes ?? 0) > max) {
+max = c.votes ?? 0;
+winner = c.name || "Unknown";
+}
+});
+
+// DRAW CHART
+new Chart(document.getElementById("chart"), {
+type: "bar",
+data: {
+labels: names,
+datasets: [{
+label: "Votes",
+data: votes
+}]
+}
+});
+
+// SHOW WINNER
+document.getElementById("winner").innerHTML =
+"<h2>🏆 Winner: " + winner + "</h2>";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>Add Candidate</h2>
+
+<input id="name" placeholder="Candidate Name"><br><br>
+<input id="party" placeholder="Party"><br><br>
+<input id="symbol" placeholder="Symbol URL (/image/download.jpg)"><br><br>
+
+<button onclick="addCandidate()">Add Candidate</button>
+<h3>Result Control</h3>
+
+<button onclick="approveResult()">Approve Result</button>
+<button onclick="closeResult()">Close Result</button>
+
+<a href="dashboard.html">
+<button>📊 Open Dashboard</button>
+</a>
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+
+function addCandidate() {
+
+const nameVal = document.getElementById("name").value;
+const partyVal = document.getElementById("party").value;
+const symbolVal = document.getElementById("symbol").value;
+
+fetch("http://localhost:5000/add-candidate", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+name: nameVal,
+party: partyVal,
+symbol: symbolVal
+})
+})
+.then(res => res.text())
+.then(data => alert(data));
+
+}
+
+function approveResult() {
+fetch("http://localhost:5000/approve-result", {
+method: "POST"
+})
+.then(res => res.text())
+.then(data => alert(data));
+}
+
+function closeResult() {
+fetch("http://localhost:5000/close-result", {
+method: "POST"
+})
+.then(res => res.text())
+.then(data => alert(data));
+}
+
+</script>
+
+</body>
+</html>

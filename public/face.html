@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Face Verify</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-img"></div>
+
+<div class="center">
+<div class="card">
+
+<h2>Face Verification</h2>
+
+<video id="video" width="250" autoplay></video><br><br>
+
+<button onclick="next()">Verify & Continue</button>
+
+</div>
+</div>
+
+<div class="right-img"></div>
+
+</div>
+
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+video.srcObject = stream;
+});
+
+function next() {
+alert("Face Verified");
+window.location.href = "vote.html";
+}
+</script>
+
+</body>
+</html>

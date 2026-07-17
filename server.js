@@ -12,12 +12,12 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
 
-// DB Connect
-const MONGO_URI = "mongodb+srv://mihir:Mihir%4012345@onlineelcation1.j4teftl.mongodb.net/votingDB?retryWrites=true&w=majority&appName=onlineelcation1";
+/* ================= DATABASE ================= */
 
-mongoose.connect(MONGO_URI)
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log("MongoDB Atlas Connected"))
 .catch(err => console.log(err));
+
 /* ================= OTP SYSTEM ================= */
 
 let otpStore = {};
@@ -94,7 +94,7 @@ app.post("/add-candidate", async (req, res) => {
     }
 });
 
-/* ================= GET CANDIDATES (IMPORTANT) ================= */
+/* ================= GET CANDIDATES ================= */
 
 app.get("/candidates", async (req, res) => {
     try {
@@ -132,27 +132,18 @@ app.post("/vote", async (req, res) => {
 
 let resultApproved = false;
 
-// APPROVE RESULT
 app.post("/approve-result", (req, res) => {
     resultApproved = true;
     res.send("Result Approved");
 });
 
-// CLOSE RESULT
 app.post("/close-result", (req, res) => {
     resultApproved = false;
     res.send("Result Closed");
 });
 
-// CHECK STATUS
 app.get("/result-status", (req, res) => {
     res.json({ approved: resultApproved });
-});
-
-/* ================= SERVER ================= */
-
-app.listen(5000, () => {
-    console.log("🚀 Server running on port 5000");
 });
 
 /* ================= DASHBOARD ================= */
@@ -163,6 +154,7 @@ app.get("/admin-stats", async (req, res) => {
         const totalCandidates = await Candidate.countDocuments();
 
         const candidates = await Candidate.find();
+
         let totalVotes = 0;
 
         candidates.forEach(c => {
@@ -179,4 +171,12 @@ app.get("/admin-stats", async (req, res) => {
     } catch (err) {
         res.status(500).send("Error fetching stats");
     }
+});
+
+/* ================= SERVER ================= */
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

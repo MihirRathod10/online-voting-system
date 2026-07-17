@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>Register</title>
 <link rel="stylesheet" href="style.css">
@@ -17,21 +18,21 @@
 <h2>Register</h2>
 
 <input id="username" placeholder="Username">
+
 <input id="password" type="password" placeholder="Password">
+
 <input id="aadhaar" placeholder="Aadhaar (12 digit)">
-<input id="mobile" placeholder="Mobile">
 
-<button onclick="sendOtp()">Send OTP</button>
-
-<input id="otp" placeholder="Enter OTP">
-
-<button onclick="verifyOtp()">Verify OTP</button>
 
 <br><br>
 
 <!-- FACE CAPTURE -->
-<video id="video" width="250" autoplay></video><br><br>
+<video id="video" width="250" autoplay></video>
+
+<br><br>
+
 <button onclick="capture()">Capture Face</button>
+
 <p id="status"></p>
 
 <br>
@@ -39,7 +40,9 @@
 <button onclick="register()">Register</button>
 
 <br><br>
+
 <a href="login.html">Login</a>
+
 
 </div>
 </div>
@@ -48,69 +51,122 @@
 
 </div>
 
+
 <script>
 
-let verified = false;
 let faceCaptured = false;
 
+
 // CAMERA START
-navigator.mediaDevices.getUserMedia({ video: true })
+
+navigator.mediaDevices.getUserMedia({ video:true })
+
 .then(stream => {
+
 document.getElementById("video").srcObject = stream;
+
 })
+
 .catch(err => {
+
 console.log("Camera Error:", err);
-alert(err.name + " : " + err.message);
+
+alert("Camera permission required");
+
 });
 
-// SEND OTP
-function sendOtp() {
-fetch("http://localhost:5000/send-otp", {
-method: "POST",
-headers: {"Content-Type": "application/json"},
-body: JSON.stringify({ mobile: mobile.value })
-})
-.then(res => res.text())
-.then(data => alert(data));
-}
 
 
 // CAPTURE FACE
-function capture() {
+
+function capture(){
+
 faceCaptured = true;
-document.getElementById("status").innerText = "Face Captured ✅";
+
+document.getElementById("status").innerText =
+"Face Captured ✅";
+
 }
+
+
 
 // REGISTER
-function register() {
 
-if (!verified) return alert("Verify OTP first ❌");
+function register(){
 
-if (!faceCaptured) return alert("Capture face first ❌");
+
+if(!faceCaptured){
+
+alert("Capture face first ❌");
+return;
+
+}
+
 
 const aadhaarRegex = /^[0-9]{12}$/;
-if (!aadhaarRegex.test(aadhaar.value)) {
-return alert("Invalid Aadhaar ❌");
+
+
+if(!aadhaarRegex.test(
+document.getElementById("aadhaar").value
+)){
+
+alert("Invalid Aadhaar ❌");
+return;
+
 }
 
-fetch("http://localhost:5000/register", {
-method: "POST",
-headers: {"Content-Type": "application/json"},
-body: JSON.stringify({
-username: username.value,
-password: password.value,
-aadhaar: aadhaar.value
+
+
+fetch("/register", {
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+username:
+document.getElementById("username").value,
+
+password:
+document.getElementById("password").value,
+
+aadhaar:
+document.getElementById("aadhaar").value
+
 })
+
 })
-.then(res => res.text())
-.then(data => {
+
+
+.then(res=>res.text())
+
+.then(data=>{
+
 alert(data);
-window.location.href = "login.html";
+
+window.location.href="login.html";
+
+})
+
+
+.catch(err=>{
+
+alert("Server Error");
+
+console.log(err);
+
 });
 
+
 }
+
 
 </script>
 
+
 </body>
+
 </html>

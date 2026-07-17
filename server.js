@@ -13,10 +13,11 @@ app.use(cors());
 app.use(express.static("public"));
 
 // DB Connect
-mongoose.connect("mongodb://127.0.0.1:27017/votingDB")
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+const MONGO_URI = "mongodb+srv://mihir:Mihir%4012345@onlineelcation1.j4teftl.mongodb.net/votingDB?retryWrites=true&w=majority&appName=onlineelcation1";
 
+mongoose.connect(MONGO_URI)
+.then(() => console.log("MongoDB Atlas Connected"))
+.catch(err => console.log(err));
 /* ================= OTP SYSTEM ================= */
 
 let otpStore = {};

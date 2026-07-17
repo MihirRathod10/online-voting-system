@@ -219,55 +219,59 @@ app.get("/candidates",async(req,res)=>{
 
 // VOTE
 
-app.post("/vote",async(req,res)=>{
-
-    const {username,candidateId}=req.body;
+app.post("/vote", async(req,res)=>{
 
 
-    const user=await User.findOne({
-        username
-    });
+    try{
 
 
-
-    if(!user)
-        return res.send("User not found");
-
-
-    if(user.hasVoted)
-        return res.send("Already voted");
+        const {username,candidateId}=req.body;
 
 
 
-    const candidate=
-    await Candidate.findById(candidateId);
+        const user = await User.findOne({
+            username: username
+        });
 
 
 
-    if(!candidate)
-        return res.send("Candidate not found");
+        if(!user){
+
+            return res.send("User not found");
+
+        }
 
 
 
-    candidate.votes += 1;
+        if(user.hasVoted){
 
-    await candidate.save();
+            return res.send("Already voted");
 
-
-
-    user.hasVoted=true;
-
-    await user.save();
+        }
 
 
 
-    res.send("Vote successful");
+        user.hasVoted=true;
+
+        await user.save();
+
+
+
+        res.send("Vote successful");
+
+
+
+    }
+    catch(err){
+
+        console.log(err);
+
+        res.send("Vote error");
+
+    }
 
 
 });
-
-
-
 
 // DASHBOARD
 

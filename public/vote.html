@@ -1,78 +1,180 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>Vote</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
 <div class="left-img"></div>
+
 
 <div class="center">
 <div class="card">
 
+
 <h2>Vote</h2>
+
 <h3 id="welcome"></h3>
 
-<div id="candidates"></div>
+
+
+<div class="candidate">
+
+
+<img src="image/can-1.jpg" width="100">
+
+<h3>ABC</h3>
+
+<p>Party: ABC Party</p>
+
+<button onclick="vote('candidate1')">
+Vote
+</button>
+
+
+</div>
+
+
+
+<div class="candidate">
+
+
+<img src="image/can-2.jpg" width="100">
+
+<h3>BCD</h3>
+
+<p>Party: XYZ Party</p>
+
+<button onclick="vote('candidate2')">
+Vote
+</button>
+
+
+</div>
+
+
+
+
+<div class="candidate">
+
+
+<img src="image/can-3.jpg" width="100">
+
+<h3>CDE</h3>
+
+<p>Party: PQR Party</p>
+
+<button onclick="vote('candidate3')">
+Vote
+</button>
+
+
+</div>
+
+
 
 </div>
 </div>
+
+
 
 <div class="right-img"></div>
 
+
 </div>
+
+
+
 
 <script>
 
+
 const username = localStorage.getItem("user");
-document.getElementById("welcome").innerText = "Welcome " + username;
 
-fetch("http://localhost:5000/candidates")
-.then(res => res.json())
-.then(data => {
 
-const div = document.getElementById("candidates");
 
-data.forEach(c => {
+if(!username){
 
-const box = document.createElement("div");
-box.style.border = "1px solid #ccc";
-box.style.margin = "10px";
-box.style.padding = "10px";
+alert("Please login first");
 
-box.innerHTML = `
-<img src="http://localhost:5000${c.symbol}" width="50"><br>
-<b>${c.name}</b><br>
-${c.party}<br>
-Votes: ${c.votes}<br>
-<button onclick="vote('${c._id}')">Vote</button>
-`;
+window.location.href="login.html";
 
-div.appendChild(box);
-});
-
-});
-
-function vote(id) {
-fetch("http://localhost:5000/vote", {
-method: "POST",
-headers: {"Content-Type": "application/json"},
-body: JSON.stringify({
-username,
-candidateId: id
-})
-})
-.then(res => res.text())
-.then(data => {
-alert(data);
-window.location.href = "result.html";
-});
 }
+
+
+
+document.getElementById("welcome").innerText =
+"Welcome " + username;
+
+
+
+
+
+function vote(candidateId){
+
+
+
+fetch("/vote",{
+
+
+method:"POST",
+
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+username:username,
+
+candidateId:candidateId
+
+})
+
+
+})
+
+
+.then(res=>res.text())
+
+
+.then(data=>{
+
+
+alert(data);
+
+
+if(data==="Vote successful"){
+
+window.location.href="result.html";
+
+}
+
+
+});
+
+
+
+}
+
+
+
 </script>
 
+
+
 </body>
+
 </html>

@@ -74,26 +74,6 @@ body: JSON.stringify({ mobile: mobile.value })
 .then(data => alert(data));
 }
 
-// VERIFY OTP
-function verifyOtp() {
-fetch("http://localhost:5000/verify-otp", {
-method: "POST",
-headers: {"Content-Type": "application/json"},
-body: JSON.stringify({
-mobile: mobile.value,
-otp: otp.value
-})
-})
-.then(res => res.text())
-.then(data => {
-if (data === "Verified") {
-verified = true;
-alert("OTP Verified ✅");
-} else {
-alert("Wrong OTP ❌");
-}
-});
-}
 
 // CAPTURE FACE
 function capture() {

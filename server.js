@@ -71,17 +71,53 @@ app.post("/register", async (req, res) => {
 /* ================= LOGIN ================= */
 
 app.post("/login", async (req, res) => {
-    const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    try {
 
-    if (!user) return res.json({ message: "User not found" });
+        const { username, password } = req.body;
 
-    const isMatch = await bcrypt.compare(password, user.password);
+        const user = await User.findOne({
+            username: username.trim()
+        });
 
-    if (!isMatch) return res.json({ message: "Wrong password" });
+        console.log("Login Try:", username);
+        console.log("User Found:", user);
 
-    res.json({ message: "Login successful" });
+        if (!user) {
+            return res.json({
+                message: "User not found"
+            });
+        }
+
+
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+
+        if (!isMatch) {
+            return res.json({
+                message: "Wrong password"
+            });
+        }
+
+
+        res.json({
+            message: "Login successful"
+        });
+
+
+    } catch(err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            message:"Server error"
+        });
+
+    }
+
 });
 
 /* ================= ADD CANDIDATE ================= */
